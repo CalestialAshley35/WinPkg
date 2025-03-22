@@ -162,14 +162,16 @@ func installPackage(packageName, version, flag string) {
 		cmd = exec.Command("pip", "install", packageInfo.Name)
 	case "-nuget":
 		cmd = exec.Command("nuget", "install", packageInfo.Name)
-	case "-npm":
-		cmd = exec.Command("npm", "install", packageInfo.Name)
-	case "-go":
-		cmd = exec.Command("go", "get", packageInfo.Name)
-	case "-gem":
-		cmd = exec.Command("gem", "install", packageInfo.Name)
-	case "-composer":
-		cmd = exec.Command("composer", "require", packageInfo.Name)
+	case "-github":
+		// Install from GitHub repository (example: https://github.com/user/repo)
+		fmt.Println("Installing package from GitHub:", packageInfo.Name)
+		cmd = exec.Command("git", "clone", packageInfo.Installation) // Assuming `Installation` is a GitHub URL
+		if err := cmd.Run(); err != nil {
+			fmt.Println("Error during GitHub installation:", err)
+			return
+		}
+		// Optionally, run any setup commands post-clone, if necessary
+		fmt.Println("Package installed from GitHub.")
 	default:
 		fmt.Println("Installing", packageInfo.Name, "version", packageInfo.Version)
 		cmd = exec.Command(packageInfo.InstallCmd)
@@ -197,14 +199,6 @@ func uninstallPackage(packageName, flag string) {
 		cmd = exec.Command("pip", "uninstall", "-y", packageName)
 	case "-nuget":
 		cmd = exec.Command("nuget", "uninstall", packageName)
-	case "-npm":
-		cmd = exec.Command("npm", "uninstall", packageName)
-	case "-go":
-		cmd = exec.Command("go", "get", "-u", "-v", packageName)
-	case "-gem":
-		cmd = exec.Command("gem", "uninstall", packageName)
-	case "-composer":
-		cmd = exec.Command("composer", "remove", packageName)
 	default:
 		cmd = exec.Command("msiexec", "/x", packageName, "/quiet")
 	}
