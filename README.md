@@ -194,7 +194,3 @@ WinPkg is an **unofficial** package manager and is not affiliated with any offic
 ## Support
 
 For support or to report issues, please open an issue on the [GitHub repository](https://github.com/CalestialAshley35/WinPkg).
-
-____ 
-
-This updated README reflects the latest changes in the code, including the new executable (`winpkg5.exe`) and the enhanced disclaimer. The tool now supports multiple package managers, making it more versatile for different development environments.
