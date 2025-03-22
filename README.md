@@ -15,6 +15,7 @@ This tool is ideal for developers, system administrators, and power users who wa
 - **Package Publishing**: Create and publish your own packages to the repository.
 - **Repository Management**: Load and manage a repository of packages locally.
 - **Multi-Package Manager Support**: Install and uninstall packages using popular package managers like `pip`, `nuget`, `npm`, `go`, `gem`, and `composer`.
+- **Importing from GitHub**: Install and Uninstall Packages from GitHub 
 
 ## Installation
 
