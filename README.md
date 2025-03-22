@@ -21,15 +21,15 @@ This tool is ideal for developers, system administrators, and power users who wa
 To install WinPkg, follow these steps:
 
 1. **Download the Executable**:
-   - Download the latest version of `winpkg5.exe` from the official GitHub repository:
-     [Download winpkg5.exe](https://github.com/CalestialAshley35/WinPkg/blob/main/winpkg5.exe)
+   - Download the latest version of `winpkg6.exe` from the official GitHub repository:
+     [Download winpkg6.exe](https://github.com/CalestialAshley35/WinPkg/blob/main/winpkg6.exe)
 
 2. **Run the Executable**:
    - Place the downloaded `winpkg5.exe` file in a directory of your choice.
-   - Open a Command Prompt or PowerShell window and navigate to the directory containing `winpkg5.exe`.
+   - Open a Command Prompt or PowerShell window and navigate to the directory containing `winpkg6.exe`.
    - Run the executable to start using WinPkg:
      ```bash
-     ./winpkg5.exe
+     ./winpkg6.exe
      ```
 
 3. **Verify Installation**:
@@ -40,7 +40,7 @@ To install WinPkg, follow these steps:
 WinPkg provides a simple and intuitive CLI for managing packages. Below are the available commands and their usage:
 
 ### 1. Install a Package
-To install a package, use the `install` command followed by the package name. You can optionally specify a version or a package manager flag.
+To install a package, use the `install` command followed by the package name. You can optionally specify a version or a package manager flag and also importing from github.
 
 ```bash
 winpkg> install <package_name> [version] [flag]
@@ -50,6 +50,11 @@ Example:
 ```bash
 winpkg> install notepad++
 winpkg> install requests -python
+```
+
+Example with github:
+```bash
+winpkg> install <package-name> -github
 ```
 
 ### 2. Uninstall a Package
