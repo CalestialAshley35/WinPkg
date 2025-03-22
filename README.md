@@ -1,6 +1,6 @@
 # WinPkg - Advanced Windows Package Manager
 
-WinPkg is an **unofficial**, **advanced** package manager for Windows, designed to simplify the installation, management, and updating of software packages on Windows systems and is written in Go, It provides a command-line interface (CLI) for users to interact with a repository of packages, enabling seamless installation, uninstallation, searching, and updating of software.
+WinPkg is an **unofficial**, **advanced** package manager for Windows, designed to simplify the installation, management, and updating of software packages on Windows systems. It is written in Go and provides a command-line interface (CLI) for users to interact with a repository of packages, enabling seamless installation, uninstallation, searching, and updating of software.
 
 This tool is ideal for developers, system administrators, and power users who want to automate software management on Windows systems. WinPkg is lightweight, fast, and extensible, allowing users to create and publish their own packages to the repository.
 
@@ -14,22 +14,22 @@ This tool is ideal for developers, system administrators, and power users who wa
 - **Custom Commands**: Execute custom commands directly from the CLI.
 - **Package Publishing**: Create and publish your own packages to the repository.
 - **Repository Management**: Load and manage a repository of packages locally.
+- **Multi-Package Manager Support**: Install and uninstall packages using popular package managers like `pip`, `nuget`, `npm`, `go`, `gem`, and `composer`.
 
 ## Installation
 
 To install WinPkg, follow these steps:
 
 1. **Download the Executable**:
-   - Download the latest version of `winpkg4.exe` from the official GitHub repository:
-     [Download winpkg.exe](https://github.com/CalestialAshley35/WinPkg/blob/9c0c3c5f2ddc4615a1547cf50fca1e4b1ad9f4e7/winpkg4.exe)
+   - Download the latest version of `winpkg5.exe` from the official GitHub repository:
+     [Download winpkg5.exe](https://github.com/CalestialAshley35/WinPkg/blob/main/winpkg5.exe)
 
 2. **Run the Executable**:
-   - Place the downloaded `winpkg4
-   - exe` file in a directory of your choice.
-   - Open a Command Prompt or PowerShell window and navigate to the directory containing `winpkg.exe`.
+   - Place the downloaded `winpkg5.exe` file in a directory of your choice.
+   - Open a Command Prompt or PowerShell window and navigate to the directory containing `winpkg5.exe`.
    - Run the executable to start using WinPkg:
      ```bash
-     ./winpkg4.exe
+     ./winpkg5.exe
      ```
 
 3. **Verify Installation**:
@@ -40,27 +40,29 @@ To install WinPkg, follow these steps:
 WinPkg provides a simple and intuitive CLI for managing packages. Below are the available commands and their usage:
 
 ### 1. Install a Package
-To install a package, use the `install` command followed by the package name. You can optionally specify a version.
+To install a package, use the `install` command followed by the package name. You can optionally specify a version or a package manager flag.
 
 ```bash
-winpkg> install <package_name> [version]
+winpkg> install <package_name> [version] [flag]
 ```
 
 Example:
 ```bash
 winpkg> install notepad++
+winpkg> install requests -python
 ```
 
 ### 2. Uninstall a Package
-To uninstall a package, use the `uninstall` command followed by the package name.
+To uninstall a package, use the `uninstall` command followed by the package name. You can optionally specify a package manager flag.
 
 ```bash
-winpkg> uninstall <package_name>
+winpkg> uninstall <package_name> [flag]
 ```
 
 Example:
 ```bash
 winpkg> uninstall notepad++
+winpkg> uninstall requests -python
 ```
 
 ### 3. List Installed Packages
@@ -179,7 +181,7 @@ Each package in the repository is represented by a `Package` struct with the fol
 When a package is installed, WinPkg executes the `InstallCmd` specified in the package details. The package is then added to the `installedPackages` map.
 
 ### Uninstallation Process
-When a package is uninstalled, WinPkg uses the `msiexec` command to remove the package from the system.
+When a package is uninstalled, WinPkg uses the appropriate package manager command (e.g., `pip`, `npm`, `msiexec`) to remove the package from the system.
 
 ## License
 
@@ -187,8 +189,12 @@ WinPkg is released under the MIT License. See the [LICENSE](https://github.com/C
 
 ## Disclaimer
 
-WinPkg is an **unofficial** package manager and is not affiliated with any official Windows software distribution channels. Use it at your own risk. The developers are not responsible for any issues arising from the use of this tool.
+WinPkg is an **unofficial** package manager and is not affiliated with any official Windows software distribution channels. However, it is a trusted tool developed with transparency and security in mind. Use it at your own risk. The developers are not responsible for any issues arising from the use of this tool.
 
 ## Support
 
 For support or to report issues, please open an issue on the [GitHub repository](https://github.com/CalestialAshley35/WinPkg).
+
+____ 
+
+This updated README reflects the latest changes in the code, including the new executable (`winpkg5.exe`) and the enhanced disclaimer. The tool now supports multiple package managers, making it more versatile for different development environments.
