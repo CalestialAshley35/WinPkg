@@ -18,7 +18,7 @@ type Package struct {
 	Section     string `json:"section"`
 }
 
-var installedPackages = make(map[string]string) // map of package names to versions
+var installedPackages = make(map[string]string)
 var repository []Package
 
 func main() {
@@ -85,14 +85,55 @@ func main() {
 }
 
 func loadRepository() {
-	// Ideally, we would load a repository from a JSON or database
-	// For simplicity, we'll hardcode some packages here
-	repository = []Package{
-		{Name: "examplePackage", Version: "1.0.0", Installation: "example_v1.exe", InstallCmd: "start example_v1.exe", Section: "utilities", Description: "An example package."},
-		{Name: "examplePackage", Version: "2.0.0", Installation: "example_v2.exe", InstallCmd: "start example_v2.exe", Section: "utilities", Description: "An updated example package."},
+	if len(repository) == 0 {
+		fmt.Println("No packages found. Would you like to create a new package? (y/n)")
+		reader := bufio.NewReader(os.Stdin)
+		response, _ := reader.ReadString('\n')
+		if strings.TrimSpace(response) == "y" {
+			createPackage()
+		}
 	}
+}
 
-	// In a real-world scenario, you could fetch this repository from a remote source
+func createPackage() {
+	fmt.Println("Enter the package details:")
+
+	var pkg Package
+	fmt.Print("Name: ")
+	fmt.Scanln(&pkg.Name)
+	fmt.Print("Version: ")
+	fmt.Scanln(&pkg.Version)
+	fmt.Print("Installation File: ")
+	fmt.Scanln(&pkg.Installation)
+	fmt.Print("Description: ")
+	fmt.Scanln(&pkg.Description)
+	fmt.Print("Install Command: ")
+	fmt.Scanln(&pkg.InstallCmd)
+	fmt.Print("Section: ")
+	fmt.Scanln(&pkg.Section)
+
+	repository = append(repository, pkg)
+	fmt.Println("Package created successfully!")
+
+	// Save package details in winpkg.infoi file
+	savePackageInfoToFile(pkg)
+}
+
+func savePackageInfoToFile(pkg Package) {
+	fileContent := fmt.Sprintf(`*Name*: %s
+*Version*: %s
+*Installation*: %s
+*Description*: %s
+*Install*: %s
+*Section*: %s
+`, pkg.Name, pkg.Version, pkg.Installation, pkg.Description, pkg.InstallCmd, pkg.Section)
+
+	err := ioutil.WriteFile("winpkg.infoi", []byte(fileContent), 0644)
+	if err != nil {
+		fmt.Println("Error saving winpkg.infoi file:", err)
+	} else {
+		fmt.Println("Package information saved to winpkg.infoi.")
+	}
 }
 
 func installPackage(packageName, version string) {
@@ -125,7 +166,6 @@ func uninstallPackage(packageName string) {
 		return
 	}
 
-	// Assuming the package has a standard uninstall process (e.g., msiexec for MSI)
 	cmd := exec.Command("msiexec", "/x", packageName, "/quiet")
 	err := cmd.Run()
 	if err != nil {
@@ -186,7 +226,6 @@ func updatePackage(packageName string) {
 		return
 	}
 
-	// Uninstall the current version and install the latest version
 	uninstallPackage(packageName)
 	installPackage(packageName, latestPackage.Version)
 }
@@ -210,7 +249,6 @@ func publishPackage(infoFile string) {
 
 	packageInfo := parsePackageInfo(fileContent)
 
-	// Here you would add the package to a database or repository
 	repository = append(repository, packageInfo)
 	fmt.Println("Published Package:", packageInfo.Name, "version", packageInfo.Version)
 }
