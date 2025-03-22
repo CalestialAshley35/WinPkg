@@ -40,16 +40,25 @@ func main() {
 				continue
 			}
 			version := ""
+			flag := ""
 			if len(args) > 2 {
-				version = args[2]
+				if strings.HasPrefix(args[2], "-") {
+					flag = args[2]
+				} else {
+					version = args[2]
+				}
 			}
-			installPackage(args[1], version)
+			installPackage(args[1], version, flag)
 		case "uninstall":
 			if len(args) < 2 {
 				fmt.Println("Please provide a package name.")
 				continue
 			}
-			uninstallPackage(args[1])
+			flag := ""
+			if len(args) > 2 {
+				flag = args[2]
+			}
+			uninstallPackage(args[1], flag)
 		case "list":
 			listPackages()
 		case "search":
@@ -115,7 +124,6 @@ func createPackage() {
 	repository = append(repository, pkg)
 	fmt.Println("Package created successfully!")
 
-	// Save package details in winpkg.infoi file
 	savePackageInfoToFile(pkg)
 }
 
@@ -136,7 +144,7 @@ func savePackageInfoToFile(pkg Package) {
 	}
 }
 
-func installPackage(packageName, version string) {
+func installPackage(packageName, version, flag string) {
 	packageInfo, err := findPackage(packageName, version)
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -148,8 +156,25 @@ func installPackage(packageName, version string) {
 		return
 	}
 
-	fmt.Println("Installing", packageInfo.Name, "version", packageInfo.Version)
-	cmd := exec.Command(packageInfo.InstallCmd)
+	var cmd *exec.Cmd
+	switch flag {
+	case "-python":
+		cmd = exec.Command("pip", "install", packageInfo.Name)
+	case "-nuget":
+		cmd = exec.Command("nuget", "install", packageInfo.Name)
+	case "-npm":
+		cmd = exec.Command("npm", "install", packageInfo.Name)
+	case "-go":
+		cmd = exec.Command("go", "get", packageInfo.Name)
+	case "-gem":
+		cmd = exec.Command("gem", "install", packageInfo.Name)
+	case "-composer":
+		cmd = exec.Command("composer", "require", packageInfo.Name)
+	default:
+		fmt.Println("Installing", packageInfo.Name, "version", packageInfo.Version)
+		cmd = exec.Command(packageInfo.InstallCmd)
+	}
+
 	err = cmd.Run()
 	if err != nil {
 		fmt.Println("Error during installation:", err)
@@ -160,13 +185,30 @@ func installPackage(packageName, version string) {
 	fmt.Println("Package", packageInfo.Name, "installed successfully.")
 }
 
-func uninstallPackage(packageName string) {
+func uninstallPackage(packageName, flag string) {
 	if _, ok := installedPackages[packageName]; !ok {
 		fmt.Println("Package not installed:", packageName)
 		return
 	}
 
-	cmd := exec.Command("msiexec", "/x", packageName, "/quiet")
+	var cmd *exec.Cmd
+	switch flag {
+	case "-python":
+		cmd = exec.Command("pip", "uninstall", "-y", packageName)
+	case "-nuget":
+		cmd = exec.Command("nuget", "uninstall", packageName)
+	case "-npm":
+		cmd = exec.Command("npm", "uninstall", packageName)
+	case "-go":
+		cmd = exec.Command("go", "get", "-u", "-v", packageName)
+	case "-gem":
+		cmd = exec.Command("gem", "uninstall", packageName)
+	case "-composer":
+		cmd = exec.Command("composer", "remove", packageName)
+	default:
+		cmd = exec.Command("msiexec", "/x", packageName, "/quiet")
+	}
+
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println("Error during uninstallation:", err)
@@ -226,8 +268,8 @@ func updatePackage(packageName string) {
 		return
 	}
 
-	uninstallPackage(packageName)
-	installPackage(packageName, latestPackage.Version)
+	uninstallPackage(packageName, "")
+	installPackage(packageName, latestPackage.Version, "")
 }
 
 func useCommand(command string) {
