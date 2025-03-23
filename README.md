@@ -36,6 +36,8 @@ To install WinPkg, follow these steps:
 3. **Verify Installation**:
    - Once the application starts, you should see the `winpkg>` prompt, indicating that WinPkg is ready to use.
 
+Or you can download from https://calestialashley35.itch.io/winpkg
+
 ## Usage
 
 WinPkg provides a simple and intuitive CLI for managing packages. Below are the available commands and their usage:
